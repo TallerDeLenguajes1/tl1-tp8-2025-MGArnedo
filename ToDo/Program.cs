@@ -1,8 +1,8 @@
 ﻿public class Tarea
 {
-    private int TareaID;
-    private string Descripcion;
-    private int Duracion;
+    private int tareaID;
+    private string descripcion;
+    private int duracion;
     private static int contadorID = 1000;
 
     public int TareaID
@@ -27,8 +27,14 @@
             duracion = value;
         }
     } // Validar que esté entre 10 y 100
-    // Puedes añadir un constructor y métodos auxiliares si lo consideras necesario
-class Program
+      // Puedes añadir un constructor y métodos auxiliares si lo consideras necesario
+    public Tarea(int duracion, string descripcion)
+    {
+        this.TareaID = contadorID++;
+        this.Descripcion = descripcion;
+        this.Duracion=duracion;
+    }
+    class Program
     {
 
     }
