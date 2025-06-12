@@ -21,8 +21,14 @@ class Program
         {
             try
             {
-                Console.WriteLine("Ingrese el ID de la tarea para moverla a la lista de tareas realizadas: ");
+                Console.WriteLine("Ingrese el ID de la tarea pendiente para moverla a realizada: ");
                 int buscarId = int.Parse(Console.ReadLine());
+                Tarea tarea = tareasPendientes.Find(f => f.TareaID == buscarId);
+                if (tarea != null)
+                {
+                    tareasPendientes.Remove(tarea);
+                    tareasRealizadas.Add(tarea);
+                }
                 break;
             }
             catch
@@ -30,14 +36,43 @@ class Program
                 Console.WriteLine("Entrada invalida");
             }
         }
-        Tarea tarea = tareasPendientes.Find(f => f.TareaID == buscarId);
-        if (tarea != null)
-        {
-            tareasPendientes.Remove(tarea);
-            tareasRealizadas.Add(tarea);
-        }
+        
         //4. Desarrolle una función para buscar tareas pendientes por descripción y mostrarla por consola. 
+        while (true)
+        {
+            try
+            {
+                Console.WriteLine("Ingrese la descripcion de las tareas a buscar: ");
+                string buscarDescripcion = Console.ReadLine().ToLower().Trim();
+                List<Tarea> tareas = tareasPendientes.FindAll(f => f.Descripcion.ToLower().Contains(buscarDescripcion));
+                if (tareas.Count > 0)
+                {
+                    MostrarTareas(tareas, "Lista de tareas pendientes que coinciden parcialmente con la descripcion");
+                }
+                else
+                {
+                    Console.WriteLine("No se encontraron tareas que coincidan");
+                }
+                break;
+            }
+            catch
+            {
+                Console.WriteLine("Entrada invalida");
+            }
+        }
+        
         //5. Mostrar un listado de todas las tareas (pendientes y realizadas) 
+        MostrarTareas(tareasPendientes, "Lista tareas PENDIENTES");
+        MostrarTareas(tareasRealizadas, "Lista tareas REALIZADAS");
         //6. Diseña un menú principal que permita al usuario acceder a cada una de las funcionalidades descritas. La interacción debe ser intuitiva (ej. "Presione 1 para...", "Ingrese el ID de la tarea:", etc.). 
     }
+    static void MostrarTareas(List<Tarea> Lista1, string titulo)
+    {
+        Console.WriteLine($"---{titulo}---");
+        foreach (var tarea in Lista1)
+        {
+            Console.WriteLine($"ID: {tarea.TareaID}\nDescripcion: {tarea.Descripcion}\nDuracion: {tarea.Duracion}");
+        }
+    }
 }
+

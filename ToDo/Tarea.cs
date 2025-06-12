@@ -4,6 +4,7 @@ namespace EspacioTarea
     {
         public int TareaID { get; set; }
         public string Descripcion { get; set; }
+        private int duracion;
         public int Duracion
         {
             get => duracion;
@@ -12,7 +13,7 @@ namespace EspacioTarea
                 if (value < 101 && value > 9)
                     Duracion = value;
                 else
-                    Console.WriteLine("Error: La duracion debe estar entre 10 y 100")
+                    Console.WriteLine("Error: La duracion debe estar entre 10 y 100");
             }
         } // Validar que esté entre 10 y 100 
                                           // Puedes añadir un constructor y métodos auxiliares si lo consideras necesario 
@@ -23,7 +24,7 @@ namespace EspacioTarea
         {
             this.TareaID = contadorID++;
             this.Descripcion = Descripcion;
-            this.Duracion = Duracion;
+            this.duracion = Duracion;
          }
         
 
