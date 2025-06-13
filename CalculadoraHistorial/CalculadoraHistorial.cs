@@ -10,57 +10,96 @@ namespace EspacioCalculadora
     }
     public class Operacion
     {
-        private double resultadoAnterior; // Almacena el resultado previo al cálculo actual 
+        private double resultadoAnterior { get; set; } // Almacena el resultado previo al cálculo actual 
         private double nuevoValor; //El valor con el que se opera sobre el resultadoAnterior 
-        private TipoOperacion operacion;// El tipo de operación realizada 
+
+        public TipoOperacion Tipo => operacion;
+
+        private TipoOperacion operacion { get; set; }// El tipo de operación realizada 
         public double Resultado
         {
-            
+            get
+            {
+                switch (operacion)
+                {
+                    case TipoOperacion.Suma:
+                        return resultadoAnterior + nuevoValor;
+                    case TipoOperacion.Resta:
+                        return resultadoAnterior - nuevoValor;
+                    case TipoOperacion.Multiplicacion:
+                        return resultadoAnterior * nuevoValor;
+                    case TipoOperacion.Division:
+                        if (nuevoValor != 0)
+                        {
+                            return resultadoAnterior / nuevoValor;
+                        }
+                        else
+                        {
+                            throw new DivideByZeroException("No se puede dividir en cero");
+                        }
+                    case TipoOperacion.Limpiar:
+                        return 0;
+                    default:
+                        Console.WriteLine("Operacion invalida");
+                        return 0;
+                }
+            }
             /* Lógica para calcular o devolver el resultado */
         }
         // Propiedad pública para acceder al nuevo valor utilizado en la operación 
         public double NuevoValor {
-            get { ...}
+            get
+            {
+                return nuevoValor;
+            }
+
         }
         // Constructor u otros métodos necesarios para inicializar y gestionar la operación 
         // ... 
-        public Operacion(double resultadoAnterior, double nuevoValor, TipoOperacion operacion, double Resultado)
+        public Operacion(double resultadoAnterior, double nuevoValor, TipoOperacion operacion)
         {
             this.resultadoAnterior = resultadoAnterior;
             this.nuevoValor = nuevoValor;
             this.operacion = operacion;
-            this.Resultado = Resultado;
         }
     } 
     public class Calculadora
         {
             private double numero;
+            private List<Operacion> historial = new List<Operacion>();
+            public List<Operacion> Historial => historial;
+
             public Calculadora(double valorInicial = 0)
+        {
+            numero = valorInicial;
+        }
+        public void Sumar(double termino)
+        {
+            historial.Add(new Operacion(numero, termino, TipoOperacion.Suma));
+            numero += termino;
+                
+        }
+        public void Restar(double termino)
+        {
+            historial.Add(new Operacion(numero, termino, TipoOperacion.Resta));
+            numero -= termino;
+        }
+        public void Multiplicar(double termino)
+        {
+            historial.Add(new Operacion(numero, termino, TipoOperacion.Multiplicacion));
+            numero *= termino;
+        }
+        public void Dividir(double termino)
+        {
+            if (termino != 0)
             {
-                numero = valorInicial;
+                historial.Add(new Operacion(numero, termino, TipoOperacion.Division));
+                numero /= termino;
             }
-            public void Sumar(double termino)
+            else
             {
-                numero += termino;
+                throw new DivideByZeroException("No se puede dividir en cero");
             }
-            public void Restar(double termino)
-            {
-                numero -= termino;
-            }
-            public void Multiplicar(double termino)
-            {
-                numero *= termino;
-            }
-            public void Dividir(double termino)
-            {
-                if (termino != 0)
-                {
-                    numero /= termino;
-                }
-                else
-                {
-                    throw new DivideByZeroException("No se puede dividir por cero");
-                }
             }
             public double Resultado
             {
@@ -68,6 +107,7 @@ namespace EspacioCalculadora
             }
             public void Limpiar()
             {
+                historial.Add(new Operacion(numero, 0, TipoOperacion.Limpiar));
                 numero = 0;
             }
         }
